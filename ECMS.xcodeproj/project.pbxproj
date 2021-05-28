@@ -25,6 +25,9 @@
 /* Begin PBXFileReference section */
 		9CE40921266069740010229B /* ECMS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ECMS; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CE40924266069740010229B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9CE4092C2660F2220010229B /* DELTA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DELTA.h; sourceTree = "<group>"; };
+		9CE4092D2660F2600010229B /* PROV_Q.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PROV_Q.h; sourceTree = "<group>"; };
+		9CE4092E2660F27C0010229B /* UTIL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UTIL.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,9 @@
 			isa = PBXGroup;
 			children = (
 				9CE40924266069740010229B /* main.cpp */,
+				9CE4092C2660F2220010229B /* DELTA.h */,
+				9CE4092D2660F2600010229B /* PROV_Q.h */,
+				9CE4092E2660F27C0010229B /* UTIL.h */,
 			);
 			path = ECMS;
 			sourceTree = "<group>";
