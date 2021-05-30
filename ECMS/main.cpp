@@ -11,6 +11,7 @@
 #include "PROV_Q.h"
 #include "DELTA.h"
 
+
 using namespace std;
 
 int main(int argc, const char * argv[]) {
@@ -18,6 +19,8 @@ int main(int argc, const char * argv[]) {
     std::cout << "Hello, World!\n";
     
     DELTA d;
+    
+    //CORE* e = new CORE(10);
     
     d.insert("ss");
     

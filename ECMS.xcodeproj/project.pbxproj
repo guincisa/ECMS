@@ -28,6 +28,9 @@
 		9CE4092C2660F2220010229B /* DELTA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DELTA.h; sourceTree = "<group>"; };
 		9CE4092D2660F2600010229B /* PROV_Q.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PROV_Q.h; sourceTree = "<group>"; };
 		9CE4092E2660F27C0010229B /* UTIL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UTIL.h; sourceTree = "<group>"; };
+		9CE409362661371C0010229B /* CORE.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CORE.h; sourceTree = "<group>"; };
+		9CE4093726613DB70010229B /* TECH_Q.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TECH_Q.h; sourceTree = "<group>"; };
+		9CE4093826613E5D0010229B /* PROV_ACT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PROV_ACT.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +47,9 @@
 		9CE40918266069740010229B = {
 			isa = PBXGroup;
 			children = (
+				9CE4093826613E5D0010229B /* PROV_ACT.h */,
+				9CE409362661371C0010229B /* CORE.h */,
+				9CE4093726613DB70010229B /* TECH_Q.h */,
 				9CE40923266069740010229B /* ECMS */,
 				9CE40922266069740010229B /* Products */,
 			);

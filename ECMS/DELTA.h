@@ -70,6 +70,7 @@ public:
     //move the condition back to idle
     //once the CE has finished to execute the payload
     int endlaunch(PROV_Q* _pq, string _result) {
+        //TODO need to check is the delta is actually running on that queue
         Prov_History.insert(pair<PROV_Q*, string>(_pq, delta_c_idle));
         conditionChangeIdle();
         return result_ok;

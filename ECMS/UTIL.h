@@ -10,6 +10,16 @@
 
 using namespace std;
 
+class ThreadWrapper {
+    public:
+        pthread_t thread;
+        //pthread_mutex_t mutex;
+        ThreadWrapper(void) {
+            //pthread_mutex_init(&mutex, NULL);
+            return;
+    };};
+
+
 static const string delta_s_new = "s_new";
 static const string delta_s_devt = "s_develop";
 static const string delta_s_closed = "s_closed";
@@ -28,5 +38,7 @@ static const string delta_c_idle = "c_idle";
 static int result_ok = 0;
 static int result_nok = -1;
 static int result_undef = -2;
+
+
 
 #endif /* UTIL_h */
