@@ -12,73 +12,161 @@
 #include <mutex>
 #include <map>
 #include <thread>
-
+#include "PROV_Q.h"
 
 using namespace std;
 
+class DELTA_MGR;
+
 class DELTA {
-    
+        
 private:
-    string State;
-    
-    string Condition;
-    mutex mtxCondition;
 
     //Payload
-    list<string> Code;
+    pair<void*, int>* Code;
     
-    //In which Prov_q has been executed
-    map<PROV_Q*, string> Prov_History;
-    
-    //Dependency, string is not used
-    map<DELTA, string> Prov_Channel;
+    //Dependency
+    list<DELTA*> Dependency;
 
+    string State;
+    string Condition;
+    mutex MtxCondition;
+    bool payloadLocked = false;
+
+    //In which Prov_q has been executed
+    //list<pair<PROV_Q*,int> > Prov_History;
     
+    void conditionChangeIdle(void){
+        lock_guard<mutex> guard(MtxCondition);
+        Condition = delta_c_idle;
+    }
+    
+    void conditionChangeExec(void){
+        lock_guard<mutex> guard(MtxCondition);
+        Condition = delta_c_exec;
+    }
+    
+
+
 public:
+    
+    friend DELTA_MGR;
     
     DELTA(void){
         State = delta_s_new;
         conditionChangeIdle();
     }
     
-    void conditionChangeIdle(void){
-        lock_guard<mutex> guard(mtxCondition);
-        Condition = delta_c_idle;
+    pair<void*, int>* getPayLoad(void){
+        return Code;
     }
     
-    void conditionChangeExec(void){
-        lock_guard<mutex> guard(mtxCondition);
-        Condition = delta_c_exec;
+    int setDependency(DELTA* _d){
+        
+        //check we are not cycling?
+        
+        Dependency.push_back(_d);
+        return result_ok;
     }
     
-    list<string>* getPayload(void){
-        return &Code;
+    int removeDependency(DELTA* _d){
+        Dependency.remove(_d);
+        return result_ok;
     }
     
+    list<DELTA*> getDependency(void){
+        //better an address??
+        return Dependency;
+    }
+
     //move it to temporary condition of exec
     //only if state is closed or tested
-    int launchOn(PROV_Q* _pq) {
+    int loadOn(PROV_Q* _pq) {
         if (State != delta_s_closed && State != delta_s_intest) {
             return result_nok;
         }
         else {
-            conditionChangeExec();
-            Prov_History.insert(pair<PROV_Q*, string>(_pq, delta_r_inprogress));
+            _pq->loadDelta(this);
             return result_ok;
         }
     }
-    //move the condition back to idle
-    //once the CE has finished to execute the payload
-    int endlaunch(PROV_Q* _pq, string _result) {
-        //TODO need to check is the delta is actually running on that queue
-        Prov_History.insert(pair<PROV_Q*, string>(_pq, delta_c_idle));
-        conditionChangeIdle();
+
+    int insertPayLoad( pair<void*, int>* _code) {
+        if (State != delta_s_new && State != delta_s_open && payloadLocked)
+            return result_nok;
+        
+        State = delta_s_open;
+        Code = _code;
+        return result_ok;
+    }
+    
+    int lockPayLoad() {
+        if (State != delta_s_open)
+            return result_nok;
+        
+        payloadLocked = true;
+        return result_ok;
+    }
+    
+    int unlockPayLoad() {
+        if (State != delta_s_open)
+            return result_nok;
+        
+        payloadLocked = true;
         return result_ok;
     }
 
-    void insert(string _s){
-        Code.push_back(_s);
-    };
+    bool getLockStatus(void){
+        return payloadLocked;
+    }
+    
+    int close(){
+        if (State == delta_s_new || State == delta_s_open){
+            State = delta_s_closed;
+            return result_ok;
+        }else{
+            return result_nok;
+        }
+    }
+    
+    int inTest(){
+        if (State == delta_s_closed){
+            State = delta_s_intest;
+            return result_ok;
+        }else{
+            return result_nok;
+        }
+    }
+    
+    int freeze(){
+        if (State == delta_s_intest){
+            State = delta_s_frozen;
+            return result_ok;
+        }else{
+            return result_nok;
+        }
+    }
+    
+    int archive(){
+        //need to ingest the payload to avoid loss
+        if (State == delta_s_frozen){
+            State = delta_s_archived;
+            return result_ok;
+        }else{
+            return result_nok;
+        }
+    }
+    
+    int open(){
+        //need to ingest the payload to avoid loss
+        if (State == delta_s_frozen || State == delta_s_intest){
+            State = delta_s_open;
+            return result_ok;
+        }else{
+            return result_nok;
+        }
+    }
+
 
 };
 
